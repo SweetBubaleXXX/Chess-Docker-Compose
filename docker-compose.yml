@@ -1,0 +1,25 @@
+version: "3.6"
+
+services:
+  bot:
+    image: ${BOT_IMAGE}
+    volumes:
+      - database:/db/
+    depends_on:
+      - redis
+      - logic
+    command: ${BOT_ARGS}
+  redis:
+    image: redis
+    expose:
+      - 6379
+    command: redis-server
+  logic:
+    image: ${LOGIC_IMAGE}
+    expose:
+      - 8000
+
+volumes:
+  database:
+    name: ${DB_VOLUME:-chess-db-volume}
+    external: ${EXTERNAL_VOL:-false}
